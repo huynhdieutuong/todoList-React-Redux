@@ -1,33 +1,38 @@
-.App {
+.container h1{
+  border-bottom: 1px solid rgba(224, 224, 224, 0.774);
+  padding: 20px;
+  margin-bottom: 20px;
   text-align: center;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
-  pointer-events: none;
+.container .row {
+  margin-bottom: 15px;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.TaskForm .input-form{
+  margin-bottom: 10px;
+}
+
+.TaskForm .button-form{
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.TaskForm .mr-auto{
+  width: 100%;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.TaskForm .delete-icon {
+  width: 15px;
+  float: right;
+  margin-top: 3px;
+  cursor: pointer;
+}
+
+.TaskList {
+  text-align: center;
+}
+
+.TaskList .none-center{
+  text-align: left;
 }
