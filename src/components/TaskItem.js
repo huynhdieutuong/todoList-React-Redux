@@ -2,12 +2,16 @@ import React, { Component } from 'react';
 import { Badge, Button } from 'reactstrap';
 
 class TaskItem extends Component {
-  constructor(props) {
-    super(props);
+  onChangeStatus(id) {
+    this.props.onChangeStatus(id);
   }
 
-  onChangeStatus(id){
-    this.props.onChangeStatus(id);
+  onDeleteTask(id) {
+    this.props.onDeleteTask(id);
+  }
+
+  onEditTask(id) {
+    this.props.onEditTask(id);
   }
 
   render() {
@@ -18,8 +22,8 @@ class TaskItem extends Component {
         <td className="none-center">{task.title}</td>
         <td><Badge onClick={() => this.onChangeStatus(task.id)} color={task.status ? "danger" : "secondary" }>{task.status ? 'Kích Hoạt' : 'Ẩn'}</Badge></td>
         <td>
-          <Button color="warning">Sửa</Button>{' '}
-          <Button color="danger">Xóa</Button>
+          <Button onClick={() => this.onEditTask(task.id)} color="warning">Sửa</Button>{' '}
+          <Button onClick={() => this.onDeleteTask(task.id)} color="danger">Xóa</Button>
         </td>
       </tr>
     );

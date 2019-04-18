@@ -4,12 +4,8 @@ import { Table, Input } from 'reactstrap';
 import TaskItem from './TaskItem';
 
 class TaskList extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
-    const { tasks, onChangeStatus } = this.props;
+    const { tasks, onChangeStatus, onDeleteTask, onEditTask } = this.props;
     return (
       <div className="TaskList">
         <Table hover>
@@ -40,6 +36,8 @@ class TaskList extends Component {
                 task={task} 
                 index={index + 1}
                 onChangeStatus={onChangeStatus}
+                onDeleteTask={onDeleteTask}
+                onEditTask={onEditTask}
                 />)
             }
           </tbody>

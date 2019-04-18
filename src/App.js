@@ -18,18 +18,24 @@ class App extends Component {
     }
     this.state = {
       tasks: tasks,
-      isDisplayForm: false
+      isDisplayForm: false,
+      taskEditing: null
     }
     this.toggle = this.toggle.bind(this);
     this.closeForm = this.closeForm.bind(this);
+    this.openForm = this.openForm.bind(this);
     this.addTask = this.addTask.bind(this);
     this.onChangeStatus = this.onChangeStatus.bind(this);
+    this.onDeleteTask = this.onDeleteTask.bind(this);
+    this.onEditTask = this.onEditTask.bind(this);
   }
 
   toggle() {
+    const { taskEditing, isDisplayForm } = this.state;
     this.setState(state => {
       return {
-        isDisplayForm: !this.state.isDisplayForm
+        isDisplayForm: taskEditing ? true : !isDisplayForm,
+        taskEditing: null
       }
     })
   }
@@ -42,14 +48,28 @@ class App extends Component {
     })
   }
 
+  openForm() {
+    this.setState(state => {
+      return {
+        isDisplayForm: true
+      }
+    })
+  }
+
   addTask(newTask) {
     const { tasks } = this.state;
-    tasks.push({ ...newTask, id: uuid() });
+    if(newTask.id === '') {
+      tasks.push({ ...newTask, id: uuid() });
+    } else {
+      const index = tasks.findIndex(task => task.id === newTask.id);
+      tasks.splice(index, 1, newTask);
+    }
     this.setState(state => {
       return {
         tasks: tasks
       }
     });
+    this.closeForm();
   }
 
   onChangeStatus(id) {
@@ -67,12 +87,37 @@ class App extends Component {
     });
   }
 
+  onDeleteTask(id) {
+    const { tasks } = this.state;
+    const index = tasks.findIndex(task => task.id === id);
+    const newTasks = [ 
+      ...tasks.slice(0, index),
+      ...tasks.slice(index + 1) 
+    ];
+    this.setState(state => {
+      return {
+        tasks: newTasks
+      }
+    });
+  }
+
+  onEditTask(id) {
+    this.openForm();
+    const { tasks } = this.state;
+    const found = tasks.find(task => task.id === id);
+    this.setState(state => {
+      return{
+        taskEditing: found
+      }
+    });
+  }
+
   componentDidUpdate() {
     localStorage.setItem('tasks', JSON.stringify(this.state.tasks));
   }
 
   render() {
-    const { isDisplayForm, tasks } = this.state;
+    const { isDisplayForm, tasks, taskEditing } = this.state;
     return (
       <div className="App">
         <Container>
@@ -81,7 +126,11 @@ class App extends Component {
             {
               isDisplayForm &&
               <Col md="4">
-                <TaskForm closeForm={this.closeForm} addTask={this.addTask}/>
+                <TaskForm 
+                  closeForm={this.closeForm} 
+                  addTask={this.addTask}
+                  taskEditing={taskEditing}
+                  />
               </Col>
             }
             <Col className={ isDisplayForm ? "md-8" : "md-12" }>
@@ -97,7 +146,12 @@ class App extends Component {
               </Row>
               <Row>
                 <Col>
-                  <TaskList tasks={tasks} onChangeStatus={this.onChangeStatus}/>
+                  <TaskList 
+                    tasks={tasks} 
+                    onChangeStatus={this.onChangeStatus}
+                    onDeleteTask={this.onDeleteTask}
+                    onEditTask={this.onEditTask}
+                    />
                 </Col>
               </Row>
             </Col>
