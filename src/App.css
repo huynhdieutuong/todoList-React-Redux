@@ -36,3 +36,9 @@
 .TaskList .none-center{
   text-align: left;
 }
+
+.check-icon {
+  width: 15px;
+  margin-left: 10px;
+  margin-bottom: 5px;
+}

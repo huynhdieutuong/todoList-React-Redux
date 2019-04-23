@@ -21,7 +21,8 @@ class App extends Component {
         name: '',
         status: 0
       },
-      search: null
+      search: null,
+      sort: null
     }
     this.toggle = this.toggle.bind(this);
     this.closeForm = this.closeForm.bind(this);
@@ -32,6 +33,7 @@ class App extends Component {
     this.onEditTask = this.onEditTask.bind(this);
     this.onFilterTask = this.onFilterTask.bind(this);
     this.onSearchTask = this.onSearchTask.bind(this);
+    this.onSortTask = this.onSortTask.bind(this);
   }
 
   componentDidMount() {
@@ -161,8 +163,16 @@ class App extends Component {
     })
   }
 
+  onSortTask(value) {
+    this.setState(state => {
+      return {
+        sort: value
+      }
+    })
+  }
+
   render() {
-    let { isDisplayForm, tasks, taskEditing, filter, search } = this.state;
+    let { isDisplayForm, tasks, taskEditing, filter, search, sort } = this.state;
     if(filter) {
       tasks = tasks.filter(task => task.title.toLowerCase().indexOf(filter.name.toLowerCase()) !== -1);
       if (filter.status !== 0) {
@@ -174,6 +184,18 @@ class App extends Component {
       tasks = tasks.filter(task => task.title.toLowerCase().indexOf(search.toLowerCase()) !== -1); 
     }
 
+    if(sort) {
+      tasks.sort((a, b) => {
+        const nameA = a.title.toLowerCase();
+        const nameB = b.title.toLowerCase();
+        switch(sort) {
+          case 'a-z': return nameA > nameB ? 1 : nameA < nameB ? -1 : 0;
+          case 'z-a': return nameA > nameB ? -1 : nameA < nameB ? 1 : 0;
+          case 'kh': return b.status - a.status;
+          default: return a.status - b.status;
+        }
+      });
+    }
 
     return (
       <div className="App">
@@ -200,6 +222,7 @@ class App extends Component {
                 <Col>
                   <Control 
                     onSearchTask={this.onSearchTask}
+                    onSortTask={this.onSortTask}
                     />
                 </Col>
               </Row>
