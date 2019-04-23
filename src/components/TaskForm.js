@@ -12,6 +12,7 @@ class TaskForm extends Component {
     }
     this.onChange = this.onChange.bind(this);
     this.submitForm = this.submitForm.bind(this);
+    this.onReset = this.onReset.bind(this);
   }
 
   componentDidMount() {
@@ -71,6 +72,16 @@ class TaskForm extends Component {
       }
     })
   }
+
+  onReset() {
+    this.setState(state => {
+      return {
+        id: '',
+        title: '',
+        status: false
+      }
+    })
+  }
   
   render() {
     const { closeForm, taskEditing } = this.props;
@@ -101,7 +112,7 @@ class TaskForm extends Component {
               </Input>
               <span className="button-form">
                 <Button color="primary">Lưu Lại</Button>&nbsp;
-                <Button color="warning">Hủy Bỏ</Button>
+                <Button onClick={this.onReset} color="warning">Hủy Bỏ</Button>
               </span>
             </Form>
           </ToastBody>
