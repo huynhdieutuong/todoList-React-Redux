@@ -4,8 +4,27 @@ import { Table, Input } from 'reactstrap';
 import TaskItem from './TaskItem';
 
 class TaskList extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      filterName: '',
+      filterStatus: 0
+    }
+    this.onChange = this.onChange.bind(this);
+  }
+
+  onChange(event) {
+    const { name, value } = event.target;
+    this.setState(state => {
+      return {
+        [name]: value
+      }
+    }, () => this.props.onFilterTask(this.state));
+  }
+
   render() {
     const { tasks, onChangeStatus, onDeleteTask, onEditTask } = this.props;
+    const { filterName, filterStatus } = this.state;
     return (
       <div className="TaskList">
         <Table hover>
@@ -20,11 +39,16 @@ class TaskList extends Component {
           <tbody>
             <tr>
               <th scope="row"></th>
-              <td><Input type="text" /></td>
+              <td><Input type="text" 
+                    onChange={this.onChange}
+                    name="filterName"
+                    value={filterName}
+                    /></td>
               <td>
-                <Input type="select">
-                  <option value={true}>Kích Hoạt</option>
-                  <option value={false}>Ẩn</option>
+                <Input type="select" name="filterStatus" value={filterStatus} onChange={this.onChange}>
+                  <option value={0}>Tất Cả</option>
+                  <option value={1}>Kích Hoạt</option>
+                  <option value={-1}>Ẩn</option>
                 </Input>
               </td>
               <td></td>

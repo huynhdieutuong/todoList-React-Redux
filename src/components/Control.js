@@ -5,12 +5,14 @@ import Search from './Search';
 import Sort from './Sort';
 
 class Control extends Component {
+
   render() {
+    const { onSearchTask } = this.props;
     return (
       <div className="Control">
         <Row>
           <Col md="6">
-            <Search />
+            <Search onSearchTask={onSearchTask}/>
           </Col>
           <Col md="4">
             <Sort />

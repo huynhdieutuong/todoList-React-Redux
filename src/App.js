@@ -12,14 +12,16 @@ import './App.css';
 class App extends Component {
   constructor(props) {
     super(props);
-    let tasks = JSON.parse(localStorage.getItem('tasks'));
-    if (!tasks) {
-      tasks = [];
-    }
     this.state = {
-      tasks: tasks,
+      tasks: [],
       isDisplayForm: false,
-      taskEditing: null
+      taskEditing: null,
+      updateLocalStorage: false,
+      filter: {
+        name: '',
+        status: 0
+      },
+      search: null
     }
     this.toggle = this.toggle.bind(this);
     this.closeForm = this.closeForm.bind(this);
@@ -28,6 +30,31 @@ class App extends Component {
     this.onChangeStatus = this.onChangeStatus.bind(this);
     this.onDeleteTask = this.onDeleteTask.bind(this);
     this.onEditTask = this.onEditTask.bind(this);
+    this.onFilterTask = this.onFilterTask.bind(this);
+    this.onSearchTask = this.onSearchTask.bind(this);
+  }
+
+  componentDidMount() {
+    if(localStorage.getItem('tasks')) {
+      const tasks = JSON.parse(localStorage.getItem('tasks'));
+      this.setState(state => {
+        return {
+          tasks: tasks
+        }
+      })
+    }
+  }
+
+  componentDidUpdate() {
+    const { updateLocalStorage, tasks } = this.state;
+    if(updateLocalStorage) {
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+      this.setState(state => {
+        return {
+          updateLocalStorage: false
+        }
+      })
+    }
   }
 
   toggle() {
@@ -66,7 +93,8 @@ class App extends Component {
     }
     this.setState(state => {
       return {
-        tasks: tasks
+        tasks: tasks,
+        updateLocalStorage: true
       }
     });
     this.closeForm();
@@ -82,7 +110,8 @@ class App extends Component {
     ];
     this.setState(state => {
       return {
-        tasks: newTasks
+        tasks: newTasks,
+        updateLocalStorage: true
       }
     });
   }
@@ -96,7 +125,8 @@ class App extends Component {
     ];
     this.setState(state => {
       return {
-        tasks: newTasks
+        tasks: newTasks,
+        updateLocalStorage: true
       }
     });
   }
@@ -112,12 +142,39 @@ class App extends Component {
     });
   }
 
-  componentDidUpdate() {
-    localStorage.setItem('tasks', JSON.stringify(this.state.tasks));
+  onFilterTask(value) {
+    this.setState(state => {
+      return {
+        filter: {
+          name: value.filterName,
+          status: value.filterStatus === '1' ? true : value.filterStatus === '-1' ? false : 0
+        }
+      }
+    })
+  }
+
+  onSearchTask(value) {
+    this.setState(state => {
+      return {
+        search: value
+      }
+    })
   }
 
   render() {
-    const { isDisplayForm, tasks, taskEditing } = this.state;
+    let { isDisplayForm, tasks, taskEditing, filter, search } = this.state;
+    if(filter) {
+      tasks = tasks.filter(task => task.title.toLowerCase().indexOf(filter.name.toLowerCase()) !== -1);
+      if (filter.status !== 0) {
+        tasks = tasks.filter(task => task.status === filter.status);
+      }
+    }
+
+    if(search) {
+      tasks = tasks.filter(task => task.title.toLowerCase().indexOf(search.toLowerCase()) !== -1); 
+    }
+
+
     return (
       <div className="App">
         <Container>
@@ -141,7 +198,9 @@ class App extends Component {
               </Row>
               <Row>
                 <Col>
-                  <Control />
+                  <Control 
+                    onSearchTask={this.onSearchTask}
+                    />
                 </Col>
               </Row>
               <Row>
@@ -151,6 +210,7 @@ class App extends Component {
                     onChangeStatus={this.onChangeStatus}
                     onDeleteTask={this.onDeleteTask}
                     onEditTask={this.onEditTask}
+                    onFilterTask={this.onFilterTask}
                     />
                 </Col>
               </Row>
