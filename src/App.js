@@ -228,8 +228,7 @@ class App extends Component {
               </Row>
               <Row>
                 <Col>
-                  <TaskList 
-                    tasks={tasks} 
+                  <TaskList
                     onChangeStatus={this.onChangeStatus}
                     onDeleteTask={this.onDeleteTask}
                     onEditTask={this.onEditTask}
