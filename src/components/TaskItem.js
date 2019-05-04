@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import { Badge, Button } from 'reactstrap';
+import { connect } from 'react-redux';
+import * as actions from '../actions/index';
 
 class TaskItem extends Component {
-  onChangeStatus(id) {
-    this.props.onChangeStatus(id);
-  }
-
   onDeleteTask(id) {
     this.props.onDeleteTask(id);
   }
@@ -15,12 +13,12 @@ class TaskItem extends Component {
   }
 
   render() {
-    const { task, index } = this.props;
+    const { task, index, onChangeStatus } = this.props;
     return (
       <tr>
         <th scope="row">{index}</th>
         <td className="none-center">{task.title}</td>
-        <td><Badge onClick={() => this.onChangeStatus(task.id)} color={task.status ? "danger" : "secondary" }>{task.status ? 'Kích Hoạt' : 'Ẩn'}</Badge></td>
+        <td><Badge onClick={() => onChangeStatus(task.id)} color={task.status ? "danger" : "secondary" }>{task.status ? 'Kích Hoạt' : 'Ẩn'}</Badge></td>
         <td>
           <Button onClick={() => this.onEditTask(task.id)} color="warning">Sửa</Button>{' '}
           <Button onClick={() => this.onDeleteTask(task.id)} color="danger">Xóa</Button>
@@ -30,4 +28,16 @@ class TaskItem extends Component {
   }
 }
 
-export default TaskItem;
+const mapStateToProps = state => {
+  return {
+
+  }
+}
+
+const mapDispatchToProps = (dispatch, props) => {
+  return {
+    onChangeStatus: id => dispatch(actions.changeStatus(id))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(TaskItem);

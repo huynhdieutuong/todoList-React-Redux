@@ -24,21 +24,6 @@ class App extends Component {
     }
   }
 
-  onChangeStatus = id => {
-    const { tasks } = this.state;
-    const index = tasks.findIndex(task => task.id === id);
-    const newTasks = [ 
-      ...tasks.slice(0, index),
-      { ...tasks[index], status: !tasks[index].status },
-      ...tasks.slice(index + 1) 
-    ];
-    this.setState(state => {
-      return {
-        tasks: newTasks
-      }
-    });
-  }
-
   onDeleteTask = id => {
     const { tasks } = this.state;
     const index = tasks.findIndex(task => task.id === id);
@@ -149,7 +134,6 @@ class App extends Component {
               <Row>
                 <Col>
                   <TaskList
-                    onChangeStatus={this.onChangeStatus}
                     onDeleteTask={this.onDeleteTask}
                     onEditTask={this.onEditTask}
                     onFilterTask={this.onFilterTask}

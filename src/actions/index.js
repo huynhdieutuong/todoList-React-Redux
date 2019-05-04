@@ -30,3 +30,10 @@ export const closeForm = () => {
     type: types.CLOSE_FORM
   }
 }
+
+export const changeStatus = id => {
+  return {
+    type: types.CHANGE_STATUS,
+    id
+  }
+}
