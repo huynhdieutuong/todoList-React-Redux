@@ -1,52 +1,21 @@
 import React, { Component } from 'react';
 import { Form, Input, Toast, ToastBody, ToastHeader, Button } from 'reactstrap';
 import deleteIcon from '../icons/delete.svg';
+import { connect } from 'react-redux';
+import * as actions from '../actions/index';
 
 class TaskForm extends Component {
   constructor(props) {
     super(props);
-    this.state = {
+    this.initState = {
       id: '',
       title: '',
       status: false
     }
+    this.state = this.props.taskEditing ? this.props.taskEditing : this.initState;
     this.onChange = this.onChange.bind(this);
     this.submitForm = this.submitForm.bind(this);
     this.onReset = this.onReset.bind(this);
-  }
-
-  componentDidMount() {
-    if(this.props.taskEditing) {
-      const { id, title, status } = this.props.taskEditing;
-      this.setState(state => {
-        return {
-          id: id,
-          title: title,
-          status: status 
-        }
-      })
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if(nextProps.taskEditing) {
-      const { id, title, status } = nextProps.taskEditing;
-      this.setState(state => {
-        return {
-          id: id,
-          title: title,
-          status: status 
-        }
-      })
-    } else {
-      this.setState(state => {
-        return {
-          id: '',
-          title: '',
-          status: false 
-        }
-      })
-    }
   }
 
   onChange(event) {
@@ -63,7 +32,7 @@ class TaskForm extends Component {
 
   submitForm(event) {
     event.preventDefault();
-    this.props.addTask(this.state);
+    this.props.onAddTask(this.state);
     this.setState(state => {
       return {
         id: '',
@@ -122,4 +91,18 @@ class TaskForm extends Component {
   }
 }
 
-export default TaskForm;
+const mapStateToProp = state => {
+  return {
+
+  }
+}
+
+const mapDispatchToProp = (dispatch, props) => {
+  return {
+    onAddTask: task => {
+      dispatch(actions.addTask(task));
+    }
+  }
+}
+
+export default connect(mapStateToProp, mapDispatchToProp)(TaskForm);

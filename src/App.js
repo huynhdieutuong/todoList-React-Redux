@@ -13,10 +13,8 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      tasks: [],
       isDisplayForm: false,
       taskEditing: null,
-      updateLocalStorage: false,
       filter: {
         name: '',
         status: 0
@@ -34,29 +32,6 @@ class App extends Component {
     this.onFilterTask = this.onFilterTask.bind(this);
     this.onSearchTask = this.onSearchTask.bind(this);
     this.onSortTask = this.onSortTask.bind(this);
-  }
-
-  componentDidMount() {
-    if(localStorage.getItem('tasks')) {
-      const tasks = JSON.parse(localStorage.getItem('tasks'));
-      this.setState(state => {
-        return {
-          tasks: tasks
-        }
-      })
-    }
-  }
-
-  componentDidUpdate() {
-    const { updateLocalStorage, tasks } = this.state;
-    if(updateLocalStorage) {
-      localStorage.setItem('tasks', JSON.stringify(tasks));
-      this.setState(state => {
-        return {
-          updateLocalStorage: false
-        }
-      })
-    }
   }
 
   toggle() {
@@ -95,8 +70,7 @@ class App extends Component {
     }
     this.setState(state => {
       return {
-        tasks: tasks,
-        updateLocalStorage: true
+        tasks: tasks
       }
     });
     this.closeForm();
@@ -112,8 +86,7 @@ class App extends Component {
     ];
     this.setState(state => {
       return {
-        tasks: newTasks,
-        updateLocalStorage: true
+        tasks: newTasks
       }
     });
   }
@@ -127,8 +100,7 @@ class App extends Component {
     ];
     this.setState(state => {
       return {
-        tasks: newTasks,
-        updateLocalStorage: true
+        tasks: newTasks
       }
     });
   }
@@ -172,30 +144,30 @@ class App extends Component {
   }
 
   render() {
-    let { isDisplayForm, tasks, taskEditing, filter, search, sort } = this.state;
-    if(filter) {
-      tasks = tasks.filter(task => task.title.toLowerCase().indexOf(filter.name.toLowerCase()) !== -1);
-      if (filter.status !== 0) {
-        tasks = tasks.filter(task => task.status === filter.status);
-      }
-    }
+    let { isDisplayForm, taskEditing, filter, search, sort } = this.state;
+    // if(filter) {
+    //   tasks = tasks.filter(task => task.title.toLowerCase().indexOf(filter.name.toLowerCase()) !== -1);
+    //   if (filter.status !== 0) {
+    //     tasks = tasks.filter(task => task.status === filter.status);
+    //   }
+    // }
 
-    if(search) {
-      tasks = tasks.filter(task => task.title.toLowerCase().indexOf(search.toLowerCase()) !== -1); 
-    }
+    // if(search) {
+    //   tasks = tasks.filter(task => task.title.toLowerCase().indexOf(search.toLowerCase()) !== -1); 
+    // }
 
-    if(sort) {
-      tasks.sort((a, b) => {
-        const nameA = a.title.toLowerCase();
-        const nameB = b.title.toLowerCase();
-        switch(sort) {
-          case 'a-z': return nameA > nameB ? 1 : nameA < nameB ? -1 : 0;
-          case 'z-a': return nameA > nameB ? -1 : nameA < nameB ? 1 : 0;
-          case 'kh': return b.status - a.status;
-          default: return a.status - b.status;
-        }
-      });
-    }
+    // if(sort) {
+    //   tasks.sort((a, b) => {
+    //     const nameA = a.title.toLowerCase();
+    //     const nameB = b.title.toLowerCase();
+    //     switch(sort) {
+    //       case 'a-z': return nameA > nameB ? 1 : nameA < nameB ? -1 : 0;
+    //       case 'z-a': return nameA > nameB ? -1 : nameA < nameB ? 1 : 0;
+    //       case 'kh': return b.status - a.status;
+    //       default: return a.status - b.status;
+    //     }
+    //   });
+    // }
 
     return (
       <div className="App">
@@ -206,9 +178,9 @@ class App extends Component {
               isDisplayForm &&
               <Col md="4">
                 <TaskForm 
-                  closeForm={this.closeForm} 
-                  addTask={this.addTask}
+                  closeForm={this.closeForm}
                   taskEditing={taskEditing}
+                  key={ taskEditing ? taskEditing.id : ''}
                   />
               </Col>
             }
