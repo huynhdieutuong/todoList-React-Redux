@@ -40,6 +40,7 @@ class TaskForm extends Component {
         status: false
       }
     })
+    this.props.closeForm();
   }
 
   onReset() {
@@ -99,9 +100,8 @@ const mapStateToProp = state => {
 
 const mapDispatchToProp = (dispatch, props) => {
   return {
-    onAddTask: task => {
-      dispatch(actions.addTask(task));
-    }
+    onAddTask: task => dispatch(actions.addTask(task)),
+    closeForm: () => dispatch(actions.closeForm())
   }
 }
 

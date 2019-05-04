@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import uuid from 'uuid/v4';
 import { Container, Row, Col, Button } from 'reactstrap';
+import { connect } from 'react-redux';
+import * as actions from './actions/index';
 
 import TaskForm from './components/TaskForm';
 import Control from './components/Control';
@@ -13,7 +14,6 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isDisplayForm: false,
       taskEditing: null,
       filter: {
         name: '',
@@ -22,61 +22,9 @@ class App extends Component {
       search: null,
       sort: null
     }
-    this.toggle = this.toggle.bind(this);
-    this.closeForm = this.closeForm.bind(this);
-    this.openForm = this.openForm.bind(this);
-    this.addTask = this.addTask.bind(this);
-    this.onChangeStatus = this.onChangeStatus.bind(this);
-    this.onDeleteTask = this.onDeleteTask.bind(this);
-    this.onEditTask = this.onEditTask.bind(this);
-    this.onFilterTask = this.onFilterTask.bind(this);
-    this.onSearchTask = this.onSearchTask.bind(this);
-    this.onSortTask = this.onSortTask.bind(this);
   }
 
-  toggle() {
-    const { taskEditing, isDisplayForm } = this.state;
-    this.setState(state => {
-      return {
-        isDisplayForm: taskEditing ? true : !isDisplayForm,
-        taskEditing: null
-      }
-    })
-  }
-
-  closeForm() {
-    this.setState(state => {
-      return {
-        isDisplayForm: false
-      }
-    })
-  }
-
-  openForm() {
-    this.setState(state => {
-      return {
-        isDisplayForm: true
-      }
-    })
-  }
-
-  addTask(newTask) {
-    const { tasks } = this.state;
-    if(newTask.id === '') {
-      tasks.push({ ...newTask, id: uuid() });
-    } else {
-      const index = tasks.findIndex(task => task.id === newTask.id);
-      tasks.splice(index, 1, newTask);
-    }
-    this.setState(state => {
-      return {
-        tasks: tasks
-      }
-    });
-    this.closeForm();
-  }
-
-  onChangeStatus(id) {
+  onChangeStatus = id => {
     const { tasks } = this.state;
     const index = tasks.findIndex(task => task.id === id);
     const newTasks = [ 
@@ -91,7 +39,7 @@ class App extends Component {
     });
   }
 
-  onDeleteTask(id) {
+  onDeleteTask = id => {
     const { tasks } = this.state;
     const index = tasks.findIndex(task => task.id === id);
     const newTasks = [ 
@@ -105,8 +53,8 @@ class App extends Component {
     });
   }
 
-  onEditTask(id) {
-    this.openForm();
+  onEditTask = id => {
+    this.props.openForm();
     const { tasks } = this.state;
     const found = tasks.find(task => task.id === id);
     this.setState(state => {
@@ -116,7 +64,7 @@ class App extends Component {
     });
   }
 
-  onFilterTask(value) {
+  onFilterTask = value => {
     this.setState(state => {
       return {
         filter: {
@@ -127,7 +75,7 @@ class App extends Component {
     })
   }
 
-  onSearchTask(value) {
+  onSearchTask = value => {
     this.setState(state => {
       return {
         search: value
@@ -135,7 +83,7 @@ class App extends Component {
     })
   }
 
-  onSortTask(value) {
+  onSortTask = value => {
     this.setState(state => {
       return {
         sort: value
@@ -144,7 +92,8 @@ class App extends Component {
   }
 
   render() {
-    let { isDisplayForm, taskEditing, filter, search, sort } = this.state;
+    let { taskEditing, filter, search, sort } = this.state;
+    const { isDisplayForm, onToogleForm } = this.props;
     // if(filter) {
     //   tasks = tasks.filter(task => task.title.toLowerCase().indexOf(filter.name.toLowerCase()) !== -1);
     //   if (filter.status !== 0) {
@@ -177,8 +126,7 @@ class App extends Component {
             {
               isDisplayForm &&
               <Col md="4">
-                <TaskForm 
-                  closeForm={this.closeForm}
+                <TaskForm
                   taskEditing={taskEditing}
                   key={ taskEditing ? taskEditing.id : ''}
                   />
@@ -187,7 +135,7 @@ class App extends Component {
             <Col className={ isDisplayForm ? "md-8" : "md-12" }>
               <Row>
                 <Col md="4">
-                  <Button color="primary" onClick={this.toggle}>Thêm Công Việc</Button>
+                  <Button color="primary" onClick={onToogleForm}>Thêm Công Việc</Button>
                 </Col>
               </Row>
               <Row>
@@ -216,4 +164,17 @@ class App extends Component {
   }
 }
 
-export default App;
+const mapStateToProps = state => {
+  return {
+    isDisplayForm: state.isDisplayForm
+  }
+}
+
+const mapDispatchToProps = (dispatch, props) => {
+  return {
+    onToogleForm: () => dispatch(actions.toogleForm()),
+    openForm: () => dispatch(actions.openForm())
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
