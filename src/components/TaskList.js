@@ -24,7 +24,7 @@ class TaskList extends Component {
   }
 
   render() {
-    const { tasks, onDeleteTask, onEditTask } = this.props;
+    const { tasks } = this.props;
     const { filterName, filterStatus } = this.state;
     return (
       <div className="TaskList">
@@ -60,8 +60,6 @@ class TaskList extends Component {
                 key={index} 
                 task={task} 
                 index={index + 1}
-                onDeleteTask={onDeleteTask}
-                onEditTask={onEditTask}
                 />)
             }
           </tbody>

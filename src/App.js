@@ -14,7 +14,6 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      taskEditing: null,
       filter: {
         name: '',
         status: 0
@@ -24,29 +23,13 @@ class App extends Component {
     }
   }
 
-  onDeleteTask = id => {
-    const { tasks } = this.state;
-    const index = tasks.findIndex(task => task.id === id);
-    const newTasks = [ 
-      ...tasks.slice(0, index),
-      ...tasks.slice(index + 1) 
-    ];
-    this.setState(state => {
-      return {
-        tasks: newTasks
-      }
-    });
-  }
-
-  onEditTask = id => {
-    this.props.openForm();
-    const { tasks } = this.state;
-    const found = tasks.find(task => task.id === id);
-    this.setState(state => {
-      return{
-        taskEditing: found
-      }
-    });
+  onToogleForm = () => {
+    if (!this.props.taskEditing) {
+      this.props.onToogleForm();
+    } else {
+      this.props.openForm();
+      this.props.taskEditingNull();
+    }
   }
 
   onFilterTask = value => {
@@ -77,8 +60,8 @@ class App extends Component {
   }
 
   render() {
-    let { taskEditing, filter, search, sort } = this.state;
-    const { isDisplayForm, onToogleForm } = this.props;
+    let { filter, search, sort } = this.state;
+    const { isDisplayForm, taskEditing } = this.props;
     // if(filter) {
     //   tasks = tasks.filter(task => task.title.toLowerCase().indexOf(filter.name.toLowerCase()) !== -1);
     //   if (filter.status !== 0) {
@@ -111,16 +94,13 @@ class App extends Component {
             {
               isDisplayForm &&
               <Col md="4">
-                <TaskForm
-                  taskEditing={taskEditing}
-                  key={ taskEditing ? taskEditing.id : ''}
-                  />
+                <TaskForm taskEditing={taskEditing} key={taskEditing ? taskEditing.id : ''}/>
               </Col>
             }
             <Col className={ isDisplayForm ? "md-8" : "md-12" }>
               <Row>
                 <Col md="4">
-                  <Button color="primary" onClick={onToogleForm}>Thêm Công Việc</Button>
+                  <Button color="primary" onClick={this.onToogleForm}>Thêm Công Việc</Button>
                 </Col>
               </Row>
               <Row>
@@ -134,8 +114,6 @@ class App extends Component {
               <Row>
                 <Col>
                   <TaskList
-                    onDeleteTask={this.onDeleteTask}
-                    onEditTask={this.onEditTask}
                     onFilterTask={this.onFilterTask}
                     />
                 </Col>
@@ -150,14 +128,16 @@ class App extends Component {
 
 const mapStateToProps = state => {
   return {
-    isDisplayForm: state.isDisplayForm
+    isDisplayForm: state.isDisplayForm,
+    taskEditing: state.taskEditing
   }
 }
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
     onToogleForm: () => dispatch(actions.toogleForm()),
-    openForm: () => dispatch(actions.openForm())
+    openForm: () => dispatch(actions.openForm()),
+    taskEditingNull: () => dispatch(actions.editTaskNull())
   }
 }
 

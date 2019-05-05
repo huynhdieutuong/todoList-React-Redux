@@ -11,14 +11,11 @@ class TaskForm extends Component {
       id: '',
       title: '',
       status: false
-    }
+    };
     this.state = this.props.taskEditing ? this.props.taskEditing : this.initState;
-    this.onChange = this.onChange.bind(this);
-    this.submitForm = this.submitForm.bind(this);
-    this.onReset = this.onReset.bind(this);
   }
 
-  onChange(event) {
+  onChange = event => {
     let { name, value } = event.target;
     if(name === 'status') {
       value = value === 'true' ? true : false
@@ -30,7 +27,7 @@ class TaskForm extends Component {
     });
   }
 
-  submitForm(event) {
+  submitForm = event => {
     event.preventDefault();
     this.props.onAddTask(this.state);
     this.setState(state => {
@@ -43,7 +40,7 @@ class TaskForm extends Component {
     this.props.closeForm();
   }
 
-  onReset() {
+  onReset = () => {
     this.setState(state => {
       return {
         id: '',
@@ -94,7 +91,6 @@ class TaskForm extends Component {
 
 const mapStateToProp = state => {
   return {
-
   }
 }
 
