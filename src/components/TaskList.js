@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Table, Input } from 'reactstrap';
 import { connect } from 'react-redux';
-import * as actions from '../actions/index';
 
 import TaskItem from './TaskItem';
 
@@ -20,18 +19,20 @@ class TaskList extends Component {
       return {
         [name]: value
       }
-    }, () => this.props.onFilter(this.state));
+    });
   }
 
   render() {
-    let { tasks, filterValue } = this.props;
+    let { tasks } = this.props;
     const { filterTitle, filterStatus } = this.state;
 
     // filter
-    tasks = tasks.filter(task => task.title.toLowerCase().indexOf(filterValue.filterTitle.toLowerCase()) !== -1);
-    if (filterValue.filterStatus !== 0) {
-      tasks = tasks.filter(task => task.status === filterValue.filterStatus);
-    }
+    tasks = tasks.filter(task => task.title.toLowerCase().indexOf(filterTitle.toLowerCase()) !== -1);
+    
+    const filterStatusBoleen = filterStatus === '1' ? true : filterStatus === '-1' ? false : 0;
+    if(filterStatusBoleen !== 0) {
+      tasks = tasks.filter(task => task.status === filterStatusBoleen);
+    };
 
     // search
 
@@ -82,15 +83,8 @@ class TaskList extends Component {
 
 const mapStateToProps = state => {
   return {
-    tasks: state.tasks,
-    filterValue: state.filterValue
+    tasks: state.tasks
   }
 }
 
-const mapDispatchToProps = (dispatch, state) => {
-  return {
-    onFilter: filterValue => dispatch(actions.filterTable(filterValue))
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(TaskList);
+export default connect(mapStateToProps, null)(TaskList);
