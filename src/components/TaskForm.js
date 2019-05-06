@@ -7,12 +7,23 @@ import * as actions from '../actions/index';
 class TaskForm extends Component {
   constructor(props) {
     super(props);
-    this.initState = {
+    this.state = {
       id: '',
       title: '',
       status: false
     };
-    this.state = this.props.taskEditing ? this.props.taskEditing : this.initState;
+  }
+
+  componentDidMount() {
+    if(this.props.taskEditing) {
+      this.onFillTaskEditing();
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if(prevProps.taskEditing !== this.props.taskEditing) {
+      this.onFillTaskEditing();
+    }
   }
 
   onChange = event => {
@@ -29,35 +40,39 @@ class TaskForm extends Component {
 
   submitForm = event => {
     event.preventDefault();
-    this.props.onAddTask(this.state);
-    this.setState(state => {
-      return {
-        id: '',
-        title: '',
-        status: false
-      }
-    })
-    this.props.closeForm();
+    if(this.state.title) {
+      this.props.onSave(this.state);
+      this.onReset();
+      this.props.closeForm();
+    }
   }
 
   onReset = () => {
     this.setState(state => {
       return {
-        id: '',
         title: '',
         status: false
       }
     })
   }
+
+  onFillTaskEditing = () => {
+    const { id, title, status } = this.props.taskEditing;
+    this.setState({
+      id,
+      title,
+      status
+    })
+  }
   
   render() {
-    const { closeForm, taskEditing } = this.props;
-    const { title, status } = this.state;
+    const { closeForm } = this.props;
+    const { title, status, id } = this.state;
     return (
       <div className="TaskForm">
         <Toast>
           <ToastHeader>
-            { taskEditing ? 'Cập Nhật Công Việc' : 'Thêm Công Việc' } 
+            { id ? 'Cập Nhật Công Việc' : 'Thêm Công Việc' } 
             <img src={deleteIcon} className="delete-icon" onClick={closeForm} alt=""/>
           </ToastHeader>
           <ToastBody>
@@ -91,12 +106,13 @@ class TaskForm extends Component {
 
 const mapStateToProp = state => {
   return {
+    taskEditing: state.taskEditing
   }
 }
 
 const mapDispatchToProp = (dispatch, props) => {
   return {
-    onAddTask: task => dispatch(actions.addTask(task)),
+    onSave: task => dispatch(actions.saveTask(task)),
     closeForm: () => dispatch(actions.closeForm())
   }
 }

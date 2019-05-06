@@ -9,12 +9,17 @@ const tasks = (state = initialState, action) => {
   switch(action.type) {
     case types.LIST_ALL: 
       return state;
-    // add new task
-    case types.ADD_TASK:
-      state.push({ 
-        ...action.task, 
-        id: uuid()
-      });
+    // add new task & edit task
+    case types.SAVE_TASK:
+      if(action.task.id) {
+        index = state.findIndex(task => task.id === action.task.id);
+        state[index] = action.task;
+      } else {
+        state.push({ 
+          ...action.task, 
+          id: uuid()
+        });
+      }
       localStorage.setItem('tasks', JSON.stringify(state));
       return [...state];
     // change status

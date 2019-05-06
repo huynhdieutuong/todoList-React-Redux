@@ -24,44 +24,49 @@ class App extends Component {
   }
 
   onToogleForm = () => {
-    if (!this.props.taskEditing) {
-      this.props.onToogleForm();
+    const { taskEditing, openForm, onToogleForm, onClearTask } = this.props;
+    if(taskEditing) {
+      openForm();
     } else {
-      this.props.openForm();
-      this.props.taskEditingNull();
-    }
+      onToogleForm();
+    };
+    onClearTask({
+      id: '',
+      title: '',
+      status: false
+    });
   }
 
-  onFilterTask = value => {
-    this.setState(state => {
-      return {
-        filter: {
-          name: value.filterName,
-          status: value.filterStatus === '1' ? true : value.filterStatus === '-1' ? false : 0
-        }
-      }
-    })
-  }
+  // onFilterTask = value => {
+  //   this.setState(state => {
+  //     return {
+  //       filter: {
+  //         name: value.filterName,
+  //         status: value.filterStatus === '1' ? true : value.filterStatus === '-1' ? false : 0
+  //       }
+  //     }
+  //   })
+  // }
 
-  onSearchTask = value => {
-    this.setState(state => {
-      return {
-        search: value
-      }
-    })
-  }
+  // onSearchTask = value => {
+  //   this.setState(state => {
+  //     return {
+  //       search: value
+  //     }
+  //   })
+  // }
 
-  onSortTask = value => {
-    this.setState(state => {
-      return {
-        sort: value
-      }
-    })
-  }
+  // onSortTask = value => {
+  //   this.setState(state => {
+  //     return {
+  //       sort: value
+  //     }
+  //   })
+  // }
 
   render() {
     let { filter, search, sort } = this.state;
-    const { isDisplayForm, taskEditing } = this.props;
+    const { isDisplayForm } = this.props;
     // if(filter) {
     //   tasks = tasks.filter(task => task.title.toLowerCase().indexOf(filter.name.toLowerCase()) !== -1);
     //   if (filter.status !== 0) {
@@ -94,7 +99,7 @@ class App extends Component {
             {
               isDisplayForm &&
               <Col md="4">
-                <TaskForm taskEditing={taskEditing} key={taskEditing ? taskEditing.id : ''}/>
+                <TaskForm />
               </Col>
             }
             <Col className={ isDisplayForm ? "md-8" : "md-12" }>
@@ -137,7 +142,7 @@ const mapDispatchToProps = (dispatch, props) => {
   return {
     onToogleForm: () => dispatch(actions.toogleForm()),
     openForm: () => dispatch(actions.openForm()),
-    taskEditingNull: () => dispatch(actions.editTaskNull())
+    onClearTask: task => dispatch(actions.editTask(task))
   }
 }
 
