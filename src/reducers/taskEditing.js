@@ -1,6 +1,10 @@
 import * as types from '../constants/ActionTypes';
 
-const initialState = null;
+const initialState = {
+  id: '',
+  title: '',
+  status: false
+};
 
 const taskEditing = (state = initialState, action) => {
   switch(action.type) {

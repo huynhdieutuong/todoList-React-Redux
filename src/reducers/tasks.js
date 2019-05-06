@@ -7,7 +7,7 @@ const initialState = data ? data : [];
 const tasks = (state = initialState, action) => {
   let index = -1;
   switch(action.type) {
-    case types.LIST_ALL: 
+    case types.LIST_ALL:
       return state;
     // add new task & edit task
     case types.SAVE_TASK:

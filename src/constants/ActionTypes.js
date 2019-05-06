@@ -6,3 +6,4 @@ export const CLOSE_FORM = 'CLOSE_FORM';
 export const CHANGE_STATUS = 'CHANGE_STATUS';
 export const DELETE_TASK = 'DELETE_TASK';
 export const EDIT_TASK = 'EDIT_TASK';
+export const FILTER_TABLE = 'FILTER_TABLE';
