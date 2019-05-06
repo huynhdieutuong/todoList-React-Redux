@@ -58,3 +58,10 @@ export const searchTask = search => {
     search
   }
 }
+
+export const sortTask = value => {
+  return {
+    type: types.SORT_TASK,
+    value
+  }
+}

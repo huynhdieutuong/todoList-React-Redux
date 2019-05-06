@@ -35,14 +35,10 @@ class Search extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {}
-}
-
 const mapDispatchToProps = (dispatch, state) => {
   return {
     onSearchTask: value => dispatch(actions.searchTask(value))
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Search);
+export default connect(null, mapDispatchToProps)(Search);

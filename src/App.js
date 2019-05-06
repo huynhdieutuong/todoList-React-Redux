@@ -33,30 +33,8 @@ class App extends Component {
     });
   }
 
-  // onSortTask = value => {
-  //   this.setState(state => {
-  //     return {
-  //       sort: value
-  //     }
-  //   })
-  // }
-
   render() {
     const { isDisplayForm } = this.props;
-
-    // if(sort) {
-    //   tasks.sort((a, b) => {
-    //     const nameA = a.title.toLowerCase();
-    //     const nameB = b.title.toLowerCase();
-    //     switch(sort) {
-    //       case 'a-z': return nameA > nameB ? 1 : nameA < nameB ? -1 : 0;
-    //       case 'z-a': return nameA > nameB ? -1 : nameA < nameB ? 1 : 0;
-    //       case 'kh': return b.status - a.status;
-    //       default: return a.status - b.status;
-    //     }
-    //   });
-    // }
-
     return (
       <div className="App">
         <Container>

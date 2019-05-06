@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { UncontrolledButtonDropdown, DropdownMenu, DropdownItem, DropdownToggle } from 'reactstrap';
 import checkIcon from '../icons/checked.svg';
+import { connect } from 'react-redux';
+import * as actions from '../actions/index';
 
 class Sort extends Component {
   constructor(props) {
@@ -49,4 +51,10 @@ class Sort extends Component {
   }
 }
 
-export default Sort;
+const mapDispatchToProps = (dispatch, state) => {
+  return {
+    onSortTask: value => dispatch(actions.sortTask(value))
+  }
+}
+
+export default connect(null, mapDispatchToProps)(Sort);
