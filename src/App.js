@@ -11,13 +11,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      search: null,
-      sort: null
-    }
-  }
 
   onToogleForm = () => {
     const { taskEditing, openForm, onToogleForm, onClearTask } = this.props;

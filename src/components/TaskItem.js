@@ -34,12 +34,6 @@ class TaskItem extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-
-  }
-}
-
 const mapDispatchToProps = (dispatch, props) => {
   return {
     onChangeStatus: id => dispatch(actions.changeStatus(id)),
@@ -50,4 +44,4 @@ const mapDispatchToProps = (dispatch, props) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(TaskItem);
+export default connect(null, mapDispatchToProps)(TaskItem);
