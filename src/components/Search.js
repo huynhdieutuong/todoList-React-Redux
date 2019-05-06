@@ -1,29 +1,29 @@
 import React, { Component } from 'react';
 import { InputGroup, InputGroupAddon, Input, Button } from 'reactstrap';
+import { connect } from 'react-redux';
+import * as actions from '../actions/index';
 
-class Sort extends Component {
+class Search extends Component {
   constructor(props) {
     super(props);
     this.state = {
       search: ''
     }
-    this.onChange = this.onChange.bind(this);
-    this.onSearch = this.onSearch.bind(this);
   }
 
-  onChange(event) {
+  onChange = event => {
     this.setState({
       search: event.target.value
     })
   }
 
-  onSearch() {
+  onSearch = () => {
     this.props.onSearchTask(this.state.search);
   }
 
   render() {
     return (
-      <div className="Sort">
+      <div className="Search">
         <InputGroup>
           <Input placeholder="Nhập từ khóa..." onChange={this.onChange}/>
           <InputGroupAddon addonType="append">
@@ -35,4 +35,14 @@ class Sort extends Component {
   }
 }
 
-export default Sort;
+const mapStateToProps = state => {
+  return {}
+}
+
+const mapDispatchToProps = (dispatch, state) => {
+  return {
+    onSearchTask: value => dispatch(actions.searchTask(value))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Search);

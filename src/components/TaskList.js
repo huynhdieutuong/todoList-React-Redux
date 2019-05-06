@@ -23,19 +23,20 @@ class TaskList extends Component {
   }
 
   render() {
-    let { tasks } = this.props;
+    let { tasks, search } = this.props;
     const { filterTitle, filterStatus } = this.state;
 
     // filter
     tasks = tasks.filter(task => task.title.toLowerCase().indexOf(filterTitle.toLowerCase()) !== -1);
-    
+
     const filterStatusBoleen = filterStatus === '1' ? true : filterStatus === '-1' ? false : 0;
     if(filterStatusBoleen !== 0) {
       tasks = tasks.filter(task => task.status === filterStatusBoleen);
     };
 
     // search
-
+    tasks = tasks.filter(task => task.title.toLowerCase().indexOf(search.toLowerCase()) !== -1);
+    
     // sort
 
     return (
@@ -83,7 +84,8 @@ class TaskList extends Component {
 
 const mapStateToProps = state => {
   return {
-    tasks: state.tasks
+    tasks: state.tasks,
+    search: state.search
   }
 }
 

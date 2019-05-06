@@ -6,15 +6,14 @@ import Sort from './Sort';
 
 class Control extends Component {
   render() {
-    const { onSearchTask, onSortTask } = this.props;
     return (
       <div className="Control">
         <Row>
           <Col md="6">
-            <Search onSearchTask={onSearchTask}/>
+            <Search />
           </Col>
           <Col md="4">
-            <Sort onSortTask={onSortTask}/>
+            <Sort />
           </Col>
         </Row>
       </div>

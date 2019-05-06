@@ -33,14 +33,6 @@ class App extends Component {
     });
   }
 
-  // onSearchTask = value => {
-  //   this.setState(state => {
-  //     return {
-  //       search: value
-  //     }
-  //   })
-  // }
-
   // onSortTask = value => {
   //   this.setState(state => {
   //     return {
@@ -51,10 +43,6 @@ class App extends Component {
 
   render() {
     const { isDisplayForm } = this.props;
-
-    // if(search) {
-    //   tasks = tasks.filter(task => task.title.toLowerCase().indexOf(search.toLowerCase()) !== -1); 
-    // }
 
     // if(sort) {
     //   tasks.sort((a, b) => {
@@ -88,10 +76,7 @@ class App extends Component {
               </Row>
               <Row>
                 <Col>
-                  <Control 
-                    onSearchTask={this.onSearchTask}
-                    onSortTask={this.onSortTask}
-                    />
+                  <Control />
                 </Col>
               </Row>
               <Row>

@@ -52,9 +52,9 @@ export const editTask = task => {
   }
 }
 
-export const filterTable = filterValue => {
+export const searchTask = search => {
   return {
-    type: types.FILTER_TABLE,
-    filterValue
+    type: types.SEARCH_TASK,
+    search
   }
 }
